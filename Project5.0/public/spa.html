@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="css4spa.css">
+    <title>Project 5 SPA Page</title>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<button onclick="fetch('students', ['name' , 'student_id' , 'email'])">Students</button>
+<button id = "sections">Sections</button>
+<button onclick="fetch('courses', ['course_id' , 'course_name' , 'department' , 'credit_hours'])">Courses</button>
+<button id="enrollments">Enrollments</button>
+
+
+<div id="list">
+</div>
+
+<script>
+ $(document).ready(function(){
+    function getData(path){
+        var result = null;
+        $.get({
+        url: "http://localhost:3000/" + path + ".json",
+    //dataType:"json",
+        async : false,
+        success: function(data) {result = data;}
+
+     });
+return result;
+}
+
+    $("#sections").on('click', function()  {
+        function displayCourseName(data) {
+           var course = getData("courses/" + data.course_id);
+
+           return course.course_name;
+
+    }
+    fetch('sections', ['semester', 'section_id', 'room_number', displayCourseName ]);
+  });
+
+    $("#enrollments").on('click', function()  {
+        function displaySectID(data) {
+
+           var section = getData("sections/" + data.section_id);
+           return section.section_id;
+    }
+    fetch('enrollments', [ displaySectID]);
+  });
+
+});
+
+
+function getStudent(path, id){
+        var result = null;
+        $.get({
+        url: "http://localhost:3000/" + path + ".json",
+        dataType:"json",
+        async : false,
+        success: function(data) {result = data;}
+
+     });
+        for(a in result) {
+            if (result[a].id==id){
+        var b = result[a].name;
+}
+        }
+return b;
+}
+
+ var fetch = function(which, fields) {
+    $("#list").empty();
+    $.get("http://localhost:3000/" + which + ".json", true)
+    .done(function(json) {
+        for (item in json) {
+        row = "<tr>";
+        content = "<td>"
+        temp = null;
+            for( field in fields){
+                if(which === 'enrollments'){
+                    var x = getStudent('students', json[item].student_id)
+                    console.log(x);
+                    content += x + "</td>" + "<td>";
+                }
+            var field = fields[field];
+            if($.isFunction(field)){
+             content += field(json[item])+ "</td>" + "<td>";}
+            else {
+            content += json[item][field]+ "</td>" + "<td>";
+        }
+           }
+
+            row += content+"</tr>";
+            $("#list").append(row);
+        }
+    })
+    .fail(function(json){ console.log("fail"); })
+};
+
+</script>
+</body>
+</html>

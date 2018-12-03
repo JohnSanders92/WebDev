@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Course name:</strong>
+  <%= @course.course_name %>
+</p>
+
+<p>
+  <strong>Department:</strong>
+  <%= @course.department %>
+</p>
+
+<p>
+  <strong>Course Number::</strong>
+  <%= @course.course_id %>
+</p>
+
+<p>
+  <strong>Credit hours:</strong>
+  <%= @course.credit_hours %>
+</p>
+
+<p>
+  <strong>Sections:</strong>
+  <ul>
+  <% @course.sections.uniq.each do |section| %>
+  	<li><%= section.section_id %></li>
+  <% end %>
+  </ul>
+</p>
+
+
+
+
+<%= link_to 'Edit', edit_course_path(@course) %> |
+<%= link_to 'Back', courses_path %>
