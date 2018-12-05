@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Semester:</strong>
+  <%= @section.semester %>
+</p>
+
+<p>
+  <strong>Course:</strong>
+  <%= @section.course.course_name %>
+</p>
+
+<p>
+  <strong>Section:</strong>
+  <%= @section.section_id %>
+</p>
+
+<p>
+  <strong>Room number:</strong>
+  <%= @section.room_number %>
+</p>
+
+<p>
+  <strong>Students:</strong>
+  <ul>
+  <% @section.students.uniq.each do |id| %>
+  	<li><%= id.name %></li>
+  <% end %>
+  </ul>
+</p>
+
+<%= link_to 'Edit', edit_section_path(@section) %> |
+<%= link_to 'Back', sections_path %>
